@@ -27,7 +27,7 @@ async function writeTeam(message, roles, description, isTeam) {
   .setTimestamp();
 
   message.channel.send(embed).then(m => {
-    teamDB.set(message.author.id, [m.id, Math.floor(Date.now() / 1000)]);
+    teamDB.set(message.author.id, [m.id, Math.floor(Date.now() / 1000), roles, description, isTeam]);
   });
 }
 
@@ -41,10 +41,9 @@ async function deletePrevious(message) {
   value = await teamDB.get(author);
   if(value == null)
     return;
-  msg = await message.channel.messages.fetch(value[0])
-  if(msg == null)
-    return;
-  return msg.delete();
+  message.channel.messages.fetch(value[0])
+  .then( msg  => msg.delete)
+  .catch();
 }
 
 /*
