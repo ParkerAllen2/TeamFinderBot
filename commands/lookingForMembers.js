@@ -3,11 +3,12 @@ const { teamRoles } = require('../config.json');
 const dbManager = require('../teamDatabaseManager.js');
 
 module.exports = {
-  name: 'lookForMember',
-  aliases: ['findm', 'lookm'],
-  description: 'example',
+  name: 'lookm',
+  aliases: ['findm'],
+  description: 'Writes a message that you have a team and are looking for your given roles',
+  permission: false,
   args: true,
-  usage: '<list of roles> <extra details about you>',
+  usage: '2 artist coder 1 musician This is the description',
   cooldown: 5,
   execute(msg, args) {
 

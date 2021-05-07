@@ -22,9 +22,9 @@ client.on('ready', () => {
 
 //on message
 client.on('message', msg => {
-  //check for prfix and author is not a bot
+  //check for prefix and author is not a bot
   if(msg.author.bot) return;
-  
+  console.log(msg.content);
   msg.delete({ timeout: 5000 });
 
   if(!msg.content.startsWith(prefix)) return;
@@ -38,6 +38,9 @@ client.on('message', msg => {
 
   //check for command
   if(!command) return;
+
+  //check for permission
+  if(command.permission && !msg.member.roles.cache.some(role => role.name === admin)) return;
 
   //check for arguments
   if(command.args && !args.length){

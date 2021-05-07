@@ -1,14 +1,13 @@
-const {admin, roles } = require('../config.json');
+const { roles } = require('../config.json');
 module.exports = {
-  name: 'listRoles',
-  aliases: ['list', 'roles', 'ls'],
-  description: 'example',
+  name: 'listr',
+  aliases: ['roles', 'lsr'],
+  description: 'List the roles that lookingForTeam checks for',
+  permission: true,
   args: false,
   usage: '',
   cooldown: 5,
   execute(msg, args) {
-    if(!msg.member.roles.cache.some(role => role.name === admin)) return;
-    
     const data =[];
     for(r in roles) {
       data.push(roles[r]);

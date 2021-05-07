@@ -1,9 +1,11 @@
-const { prefix } = require('../config.json');
+const { prefix, admin } = require('../config.json');
+const COL_LENGTH = 12;
 module.exports = {
 	name: 'help',
   aliases: ['commands'],
 	description: 'List all of my commands or info about a specific command.',
 	usage: '<command name>',
+  permission: false,
   cooldown: 5,
 	execute(message, args) {
 		const data =[];
@@ -12,9 +14,10 @@ module.exports = {
     if(!args.length){
       data.push('Here\'s a list of all commands:');
       data.push(`You can send \`${prefix}help [command name]\` to get info on a specific command`);
-      
-      data.push(`\`\`\`` + "Name:".padEnd(16) + "Usage:")
-      data.push(commands.map(getCommandDescritpion).join(""));
+
+      hasPermission = message.member.roles.cache.some(role => role.name === admin);
+      data.push(`\`\`\`` + "Name:".padEnd(COL_LENGTH + 1) + "Description:")
+      data.push(commands.map(c => getCommandDescritpion(c, hasPermission)).join(""));
       data.push(`\`\`\``);
       
       return message.channel.send(data)
@@ -52,8 +55,11 @@ module.exports = {
 	}
 };
 
-function getCommandDescritpion(item) {
-  var colLength = 16;
-  var rtn = `${item.name.padEnd(colLength, ' ')}${prefix}${item.name} ${item.usage}\n`;
+function getCommandDescritpion(item, hasPermission) {
+  if(item.permission && !hasPermission) {
+    return;
+  }
+  rtn = `${prefix}${item.name.padEnd(COL_LENGTH, ' ')}${item.description}\n` + 
+  `${' '.padEnd(COL_LENGTH, ' ')} Ex. ${prefix}${item.name} ${item.usage}\n\n`;
   return rtn;
 }
