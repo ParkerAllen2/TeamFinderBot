@@ -41,9 +41,12 @@ async function deletePrevious(message) {
   value = await teamDB.get(author);
   if(value == null)
     return;
-  message.channel.messages.fetch(value[0])
-  .then( msg  => msg.delete)
-  .catch();
+  try{
+    msg = await message.channel.messages.fetch(value[0]);
+    return msg.delete();
+  } catch(error){
+    return;
+  }
 }
 
 /*
