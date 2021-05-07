@@ -11,20 +11,20 @@ module.exports = {
   usage: 'this is the description',
   cooldown: 5,
   execute(msg, args) {
-    skills = "";
-    description = "";
+    skills = '';
+    description = '';
 
     for(i in roles) {
-      if(msg.member.roles.cache.some(role => role.name === roles[i]))
-        skills += roles[i] + " ";
+      if(msg.member.roles.cache.some(role => aliasesCheck(roles[i].aliases, role)))
+        skills += roles[i].name + ' ';
     }
     
     if(args.length == 0) {
-      return dbManager.addMember(msg, skills, description, false);
+      return dbManager.writeTeam(msg, skills, description, false);
     }
 
     for(i in args) {
-      description += args[i] + " ";
+      description += args[i] + ' ';
     }
 
     if(description.length > MAXDESCRIPTIONLENGTH) {
@@ -33,6 +33,10 @@ module.exports = {
           m.delete({ timeout: 10000 })
         }).catch();
     }
-    dbManager.addMember(msg, skills, description, false);
+    dbManager.writeTeam(msg, skills, description, false);
   }
 };
+
+function aliasesCheck(aliases, role) {
+  return aliases.includes(role.name.toLowerCase());
+}

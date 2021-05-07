@@ -1,5 +1,5 @@
 const MAXDESCRIPTIONLENGTH = 256;
-const { teamRoles } = require('../config.json');
+const { roles } = require('../config.json');
 const dbManager = require('../teamDatabaseManager.js');
 
 module.exports = {
@@ -12,8 +12,8 @@ module.exports = {
   cooldown: 5,
   execute(msg, args) {
 
-    members = "";
-    description = "";
+    members = 'Looking For: ';
+    description = '';
     readingDescription = false;
     
     //<lookm junior artist this is here
@@ -21,20 +21,20 @@ module.exports = {
     let i;
     for(i = 0; i < args.length; i++) {
       if(readingDescription) {
-        description += args[i] + " ";
+        description += args[i] + ' ';
         continue;
       }
       
       //check for number
-      let amount = ""
+      let amount = ''
       if(!isNaN(args[i]) && i + 1 < args.length) {
-        amount = args[i] + " ";
+        amount = args[i] + ' ';
         i++;
       }
-      for(r in teamRoles) {
+      for(r in roles) {
         //normal check
-        if(aliasesCheck(teamRoles[r].aliases, args[i])) {
-          members += amount + teamRoles[r].name + " ";
+        if(aliasesCheck(roles[r].aliases, args[i])) {
+          members += amount + roles[r].name + ' ';
           readingDescription = false;
           break;
         }
@@ -43,8 +43,8 @@ module.exports = {
           readingDescription = true;
           break;
         }
-        if(aliasesCheck(teamRoles[r].aliases, args[i] + " " + args[i + 1])) {
-          members += amount + teamRoles[r].name + " ";
+        if(aliasesCheck(roles[r].aliases, args[i] + ' ' + args[i + 1])) {
+          members += amount + roles[r].name + ' ';
           readingDescription = false;
           i++;
           break;
@@ -52,15 +52,15 @@ module.exports = {
         readingDescription = true;
       }
       if(readingDescription) {
-        description += amount + args[i] + " ";
+        description += amount + args[i] + ' ';
       }
     }
 
     endOfString = members.substring(members.length - 2);
     if(endOfString)
 
-    if(description == "") {
-      return dbManager.addTeam(msg, members, description, true);
+    if(description == '') {
+      return dbManager.writeTeam(msg, members, description, true);
     }
 
     if(description.length > MAXDESCRIPTIONLENGTH) {
@@ -70,10 +70,10 @@ module.exports = {
         }).catch();
     }
 
-    dbManager.addTeam(msg, members, description, true);
+    dbManager.writeTeam(msg, members, description, true);
   }
 };
 
-function aliasesCheck(aliases, args, next) {
+function aliasesCheck(aliases, args) {
   return aliases.includes(args.toLowerCase());
 }
