@@ -8,7 +8,7 @@ module.exports = {
   usage: '',
   cooldown: 5,
   execute(msg, args) {
-    dbManager.deleteAuthor(msg).then( () => {
+    dbManager.deleteTeam(msg, msg.author.id).then( () => {
       msg.channel.send("**Removed**").then(m => {
         m.delete({ timeout: 10000 })
       }).catch();
