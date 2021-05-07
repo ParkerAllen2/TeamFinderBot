@@ -13,6 +13,7 @@ module.exports = {
   usage: '',
   cooldown: 5,
   execute(msg, args) {
+    return;
     let file = JSON.parse(fs.readFileSync(fileName));
     const {commands} = msg.client;
     data = writeCommands(commands);

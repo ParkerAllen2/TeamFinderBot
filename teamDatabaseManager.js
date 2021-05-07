@@ -18,7 +18,7 @@ const teamDB = new Database();
 async function writeTeam(message, roles, description, isTeam) {
   await deletePrevious(message);
 
-  color = (isTeam) ? '#ff0000' : '#0000ff';
+  color = (isTeam) ? '#499bf2' : '#ff77a1';
   const embed = new Discord.MessageEmbed()
   .setColor(color)
   .setAuthor(message.author.username)
