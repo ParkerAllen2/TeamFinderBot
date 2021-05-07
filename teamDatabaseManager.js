@@ -20,8 +20,8 @@ async function addTeam(message, roles, description) {
     await writeMembersMessage(message);
   }
   await writeTeamMessage(message);
-    
-  message.reply("**Updated**").then(m => {
+
+  message.channel.send("**Updated**").then(m => {
     m.delete({ timeout: 10000 })
   }).catch();
 }
@@ -38,7 +38,7 @@ async function writeTeamMessage(message) {
   for(k in keys) {
     value = await teamDB.get(keys[k]);
     if (value[2])
-      data.push(`\`\`\`${keys[k]} is looking for: ${value[0]}\n${value[1]}\`\`\``);
+      data.push(`\`\`\`${keys[k]} is looking for: ${value[0]}\n${value[1]}\`\`\`\n`);
   }
   data.push(`- - - - - - - - - - - - - - - - - - - - - - - - - - - - -`);
   return msg.edit(data);
@@ -55,8 +55,8 @@ async function addMember(message, roles, description) {
     await writeTeamMessage(message);
   }
   await writeMembersMessage(message);
-    
-  message.reply("**Updated**").then(m => {
+  
+  message.channel.send("**Updated**").then(m => {
     m.delete({ timeout: 10000 })
   }).catch();
 }
@@ -73,7 +73,7 @@ async function writeMembersMessage(message) {
   for(k in keys) {
     value = await teamDB.get(keys[k]);
     if (!value[2])
-      data.push(`\`\`\`${keys[k]}: ${value[0]}\n${value[1]}\`\`\``);
+      data.push(`\`\`\`${keys[k]}: ${value[0]}\n${value[1]}\`\`\`\n`);
   }
   return msg.edit(data);
 }
@@ -101,7 +101,7 @@ async function clear() {
   for(k in keys) {
     await teamDB.delete(keys[k]);
   }
-  msg.reply(`Database cleared ${keys.length} keys`)
+  msg.channel.send(`Database cleared ${keys.length} keys`)
   .then(m => {
     m.delete({ timeout: 10000 })
   }).catch();
