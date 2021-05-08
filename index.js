@@ -2,6 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const keep_alive = require('./keep_alive.js')
 const {prefix, admin} = require('./config.json');
+const helpWriter = require('./helpWriter.js');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -13,7 +14,10 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles){
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);
+  helpWriter.getCommandDescritpion(command, prefix);
 }
+
+helpWriter.writeHowTo();
 
 //on ready
 client.on('ready', () => {
@@ -25,9 +29,11 @@ client.on('message', msg => {
   //check for prefix and author is not a bot
   if(msg.author.bot) return;
   console.log(msg.content);
-  msg.delete({ timeout: 5000 });
 
-  if(!msg.content.startsWith(prefix)) return;
+  if(!msg.content.startsWith(prefix)) {
+    msg.delete({ timeout: 5000 });
+    return;
+  }
 
   //get command name and arguments
   const args = msg.content.slice(prefix.length).trim().split(/ +/);
@@ -72,7 +78,9 @@ client.on('message', msg => {
     //send message if still on cooldown
     if(now < expirationTime){
       const timeLeft = (expirationTime - now) / 1000;
-      return msg.reply(`Please wait ${timeLeft.toFixed(1)} seconds`);
+      return msg.reply(`Please wait ${timeLeft.toFixed(1)} seconds`).then(m => {
+        m.delete({ timeout: 10000 })
+      }).catch();;
     }
   }
   //delete timeStamps

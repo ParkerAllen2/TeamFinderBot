@@ -8,9 +8,11 @@ module.exports = {
   description: 'Writes a message that you have a team and are looking for your given roles',
   permission: false,
   args: true,
-  usage: '2 artist coder 1 musician This is the description',
+  usage: '[list of roles] [description]',
+  example:'2 artist coder 1 musician This is the description',
   cooldown: 5,
   execute(msg, args) {
+    msg.delete({ timeout: 5000 });
 
     members = 'Looking For: ';
     description = '';

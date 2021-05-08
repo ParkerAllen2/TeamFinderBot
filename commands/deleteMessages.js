@@ -4,7 +4,8 @@ module.exports = {
   description: 'deletes given amount of messages',
   permission: true,
   args: true,
-  usage: '4',
+  usage: '[number]',
+  example: '4',
   cooldown: 5,
   execute(msg, args) {
     amount = Math.min(args[0], 99) + 1;

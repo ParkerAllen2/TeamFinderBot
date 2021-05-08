@@ -6,12 +6,10 @@ module.exports = {
   permission: true,
   args: false,
   usage: '',
+  example: '',
   cooldown: 5,
   execute(msg, args) {
-    dbManager.clear().then(() => {
-      dbManager.writeTeamMessage(msg).then( () => {
-        dbManager.writeMembersMessage(msg);
-      });
-    });
+    msg.delete({ timeout: 5000 });
+    dbManager.clear(msg)
   }
 };

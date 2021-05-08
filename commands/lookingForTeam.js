@@ -8,9 +8,12 @@ module.exports = {
   description: 'Creates a message that you are looking to join a team',
   permission: false,
   args: false,
-  usage: 'this is the description',
+  usage: '[description]',
+  example:'This is the description',
   cooldown: 5,
   execute(msg, args) {
+    msg.delete({ timeout: 5000 });
+    
     skills = '';
     description = '';
 

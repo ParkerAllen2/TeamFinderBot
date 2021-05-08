@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const { roles } = require('../config.json');
 module.exports = {
   name: 'listr',
@@ -6,17 +7,22 @@ module.exports = {
   permission: false,
   args: false,
   usage: '',
+  example: '',
   cooldown: 5,
   execute(msg, args) {
+    msg.delete({ timeout: 5000 });
     
-    const data =[];
+    const embed = new Discord.MessageEmbed()
+    .setColor('#cc66dd')
+    .setTitle("Roles");
+
     for(r in roles) {
-      m = roles[r] + " aliases:\n";
-      m += roles[arg[0]].aliases.join(",");
-      data.push(m);
+      n = `${roles[r].name} aliases:`;
+      v = roles[r].aliases.join(", ");
+      embed.addField(n, v);
     }
 
-    msg.channel.send(data)
+    msg.channel.send(embed)
       .then(m => {
       m.delete({ timeout: 10000 })
     }).catch();

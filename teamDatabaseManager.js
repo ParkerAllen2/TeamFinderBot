@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Database = require("@replit/database");
-let { guilds } = require('./config.json');  //[0, 1] = teams, members
+let { guilds } = require('./config.json');
+const helpWriter= require('./helpWriter.js');
 const teamDB = new Database();
 /*
  * <lookm junior artist this is here
@@ -28,6 +29,7 @@ async function writeTeam(message, roles, description, isTeam) {
 
   message.channel.send(embed).then(m => {
     teamDB.set(message.author.id, [m.id, Math.floor(Date.now() / 1000), roles, description, isTeam]);
+    helpWriter.updateHowTo(message);
   });
 }
 
@@ -60,22 +62,15 @@ async function deleteTeam(message, id) {
 /*
  * clears database then rewrites messages
  */
-async function clear() {
+async function clear(message) {
   const keys = await teamDB.list();
   for(k in keys) {
     await teamDB.delete(keys[k]);
   }
-  msg.channel.send(`Database cleared ${keys.length} keys`)
+  message.channel.send(`Database cleared ${keys.length} keys`)
   .then(m => {
     m.delete({ timeout: 10000 })
   }).catch();
 }
 
-/*
- * Resets guild values since require is not asynchronus
- */
-function addNewGuild(newGuilds) {
-  guilds = newGuilds;
-}
-
-module.exports = { writeTeam, deleteTeam, clear, addNewGuild };
+module.exports = { writeTeam, deleteTeam, clear };
